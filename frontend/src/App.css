@@ -1,0 +1,73 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.App {
+  font-family: 'Arial', sans-serif;
+  background-color: #ADEFD1FF;
+  color: #9290C3;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  width: 150px;
+  height: auto;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.product-comparison-table {
+  width: 100%;
+}
+
+.table-row {
+  display: flex;
+  justify-content: start;
+}
+
+.table-cell {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #9290C3;
+}
+
+.header {
+  background-color: #9290C3;
+  color: #070F2B;
+  font-weight: bold;
+}
+
+.product-name {
+  width: 100px;
+}
+
+.price {
+  text-align: center;
+  color: #fff;
+}
+
+.highest {
+  color: red;
+}
+
+.lowest {
+  color: green;
+}
+
+/* Additional global styles */
+h1 {
+  color: #fff;
+}
+
+.button{
+  color: '#00203FFF';
+}
