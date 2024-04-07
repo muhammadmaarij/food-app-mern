@@ -36,7 +36,7 @@ function App() {
             path="/landingPage"
             element={<LandingPage setCartItems={setCartItems} />}
           />
-          <Route path="/cart" element={<CartPage cartItems={cartItems} />} />
+          <Route path="/cart" element={<CartPage />} />
           {/* <Route path="/product-management" element={<ProductManagement />} />
           <Route path="/homescreen" element={<HomeScreen />} />
           <Route path="/sales-management" element={<SalesManagement />} />

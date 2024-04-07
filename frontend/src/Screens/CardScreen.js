@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import cart from "../asualogo.png";
-import { Link } from "react-router-dom"; // Import Link from React Router
-import { useParams } from "react-router-dom"; // Import useParams
+import { Link, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import CustomButton from "../components/CustomButton";
 
 const styles = {
   container: {
@@ -13,22 +11,22 @@ const styles = {
     flexDirection: "column",
     minHeight: "100vh",
     width: "100%",
-    marginTop: "auto", // Push content to top
-    marginBottom: "-80px", // Adjust based on the height of your footer
+    marginTop: "auto",
+    marginBottom: "-80px",
   },
   card: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     border: "1px solid #e0e0e0",
-    borderRadius: "12px", // Increased border radius
+    borderRadius: "12px",
     overflow: "hidden",
     width: "100%",
     minHeight: "500px",
     marginTop: "20px",
     marginBottom: "20px",
     padding: "20px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Added shadow
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
   },
   imageContainer: {
     flex: "1 1 50%",
@@ -44,33 +42,13 @@ const styles = {
     padding: "20px",
   },
   productName: {
-    marginBottom: "15px", // Adjusted spacing
+    marginBottom: "15px",
   },
   price: {
-    marginBottom: "10px", // Adjusted spacing
-  },
-  cod: {
-    marginBottom: "10px", // Adjusted spacing
-  },
-  brand: {
-    marginBottom: "10px", // Adjusted spacing
+    marginBottom: "10px",
   },
   description: {
-    marginBottom: "15px", // Adjusted spacing
-  },
-  addToCartButton: {
-    backgroundColor: "#007bff",
-    color: "white",
-    border: "none",
-    padding: "12px 24px", // Adjusted padding
-    borderRadius: "6px", // Adjusted border radius
-    cursor: "pointer",
-    transition: "background-color 0.2s ease, transform 0.2s ease",
-    ":hover": {
-      // Added hover effect
-      backgroundColor: "#0056b3",
-      transform: "scale(1.05)",
-    },
+    marginBottom: "15px",
   },
   relatedProductsContainer: {
     display: "flex",
@@ -86,17 +64,17 @@ const styles = {
   relatedProductsList: {
     display: "flex",
     overflowX: "auto",
-    whiteSpace: "nowrap", // Prevents wrapping
+    whiteSpace: "nowrap",
     padding: "20px",
   },
   relatedProductCard: {
-    minWidth: "200px", // Ensure cards have a minimum width
-    width: "200px", // Fixed width for each card
+    minWidth: "200px",
+    width: "200px",
     border: "1px solid #ddd",
     borderRadius: "5px",
     overflow: "hidden",
     textAlign: "center",
-    marginRight: "20px", // Add margin between cards
+    marginRight: "20px",
   },
   relatedProductImage: {
     width: "100%",
@@ -109,41 +87,11 @@ const styles = {
 };
 
 const relatedProductData = [
-  {
-    name: "Related Product 1",
-    price: "$10",
-    image: "https://via.placeholder.com/200x150?text=Related+1",
-  },
-  {
-    name: "Related Product 2",
-    price: "$20",
-    image: "https://via.placeholder.com/200x150?text=Related+2",
-  },
-  {
-    name: "Related Product 3",
-    price: "$30",
-    image: "https://via.placeholder.com/200x150?text=Related+3",
-  },
-  {
-    name: "Related Product 4",
-    price: "$40",
-    image: "https://via.placeholder.com/200x150?text=Related+4",
-  },
-  {
-    name: "Related Product 5",
-    price: "$50",
-    image: "https://via.placeholder.com/200x150?text=Related+5",
-  },
-  {
-    name: "Related Product 6",
-    price: "$60",
-    image: "https://via.placeholder.com/200x150?text=Related+6",
-  },
-  // Add more related products as needed
+  // Your related products data...
 ];
 
 function CardScreen() {
-  const { productId } = useParams(); // Get the productId from the URL
+  const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const location = useLocation();
   const { setCartItems } = location.state || {};
@@ -160,12 +108,7 @@ function CardScreen() {
     fetchProduct();
   }, [productId]);
 
-  if (!product) {
-    return <div>Loading...</div>;
-  }
-
   const addToCart = () => {
-    console.log("first");
     const newCartItem = { ...product, quantity: 1 };
     const cartItems = JSON.parse(localStorage.getItem("cartItems") || "[]");
     const itemIndex = cartItems.findIndex((item) => item._id === product._id);
@@ -178,6 +121,10 @@ function CardScreen() {
 
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   };
+
+  if (!product) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div style={styles.container}>
@@ -196,13 +143,10 @@ function CardScreen() {
           <h2 style={styles.productName}>{product.pname}</h2>
           <p style={styles.price}>Price: ${product.pprice}</p>
           <p style={styles.description}>Description: {product.pdescription}</p>
-          <button onClick={addToCart} style={styles.addToCartButton}>
-            Add to Cart
-          </button>
+          <CustomButton text="Add to Cart" onClick={addToCart} />
         </div>
       </div>
       <Footer />
-
       {/* Related Products Section */}
       <div style={styles.relatedProductsContainer}>
         <h2 style={styles.relatedProductsText}>Related Products</h2>
@@ -225,7 +169,6 @@ function CardScreen() {
           ))}
         </div>
       </div>
-
       <Footer />
     </div>
   );

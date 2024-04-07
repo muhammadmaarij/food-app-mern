@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Typography,
@@ -12,8 +12,9 @@ import {
   Box,
   Paper,
 } from "@mui/material";
+import CustomButton from "../components/CustomButton";
 
-const CartPage = ({ cartItems }) => {
+const CartPage = () => {
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
     address: "",
@@ -26,6 +27,21 @@ const CartPage = ({ cartItems }) => {
       ...prevInfo,
       [name]: value,
     }));
+  };
+
+  const [cartItems, setCartItems] = useState([]);
+
+  useEffect(() => {
+    const storedCartItems = JSON.parse(
+      localStorage.getItem("cartItems") || "[]"
+    );
+    setCartItems(storedCartItems);
+  }, []);
+
+  const handleDelete = (index) => {
+    const newCartItems = cartItems.filter((item, i) => i !== index);
+    setCartItems(newCartItems);
+    localStorage.setItem("cartItems", JSON.stringify(newCartItems));
   };
 
   const totalPrice = cartItems.reduce(
@@ -44,7 +60,13 @@ const CartPage = ({ cartItems }) => {
             <List>
               {cartItems.map((item, index) => (
                 <React.Fragment key={index}>
-                  <ListItem>
+                  <ListItem
+                    secondaryAction={
+                      <Button onClick={() => handleDelete(index)} color="error">
+                        Delete
+                      </Button>
+                    }
+                  >
                     <ListItemText
                       primary={item.pname}
                       secondary={`Price: $${item.pprice} | Quantity: ${item.quantity}`}
@@ -92,9 +114,7 @@ const CartPage = ({ cartItems }) => {
                 margin="normal"
                 variant="outlined"
               />
-              <Button variant="contained" color="primary" sx={{ mt: 3 }}>
-                Checkout
-              </Button>
+              <CustomButton text="Checkout" onClick={() => {}} />
             </Box>
           </Paper>
         </Grid>
