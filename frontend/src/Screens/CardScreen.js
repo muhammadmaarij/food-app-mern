@@ -143,6 +143,7 @@ function CardScreen() {
           <h2 style={styles.productName}>{product.pname}</h2>
           <p style={styles.price}>Price: ${product.pprice}</p>
           <p style={styles.description}>Description: {product.pdescription}</p>
+          <p style={styles.description}>Product Category: {product.pcategory}</p>
           <CustomButton text="Add to Cart" onClick={addToCart} />
         </div>
       </div>

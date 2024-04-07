@@ -48,7 +48,8 @@ router.post('/postProduct', upload.single('pimage'), async (req, res) => {
             ptitle,
             pdescription,
             pprice,
-            pimage
+            pimage,
+            pcategory
         });
         await newProduct.save();
         console.log('New Product:', newProduct); // Log the product after it's been saved

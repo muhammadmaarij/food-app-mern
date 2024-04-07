@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaCartPlus, FaSearch } from "react-icons/fa"; // Importing the cart icon and search icon from react-icons library
 import category from "../category.png"; // Make sure the path to the category image is correct
 import { useNavigate, Link } from "react-router-dom";
+import logo from "../../src/store_logo.png";
 
 const Header = ({ cartItems }) => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -31,20 +32,12 @@ const Header = ({ cartItems }) => {
 
   return (
     <div style={styles.header}>
-      <div style={styles.categoryContainer} onClick={toggleDropdown}>
-        <img src={category} alt="Category" style={styles.categoryImage} />
-        {showDropdown && (
-          <div style={styles.dropdownContent}>
-            {/* Add your dropdown menu items here */}
-            <p style={styles.dropdownItem}>Category 1</p>
-            <div style={styles.separator} />
-            <p style={styles.dropdownItem}>Category 2</p>
-            <div style={styles.separator} />
-            <p style={styles.dropdownItem}>Category 3</p>
-          </div>
-        )}
+      <div style={styles.categoryContainer} onClick={() => navigate("/landingPage")}>
+        <img src={logo} alt="logo" style={styles.categoryImage} />
       </div>
-      <div style={styles.websiteName}>Kirana Shop</div>
+      <div style={styles.websiteName}>SunRise &nbsp; </div>
+      <div style={styles.websiteName1}>Mart</div>
+
       <div style={styles.searchBar}>
         <div style={styles.searchContainer}>
           <FaSearch style={styles.searchIcon} />
@@ -96,10 +89,10 @@ const styles = {
     cursor: "pointer",
   },
   categoryImage: {
-    width: 30,
-    height: 30,
+    width: 60,
+    height: 60,
     objectFit: "cover", // Ensure the image covers the entire container
-    marginRight: 20, // Add margin to the right of the image
+    marginRight: 10, // Add margin to the right of the image
   },
   dropdownContent: {
     position: "absolute",
@@ -129,8 +122,17 @@ const styles = {
     margin: "5px 0",
   },
   websiteName: {
-    fontSize: "24px",
+    fontSize: "30px",
     fontWeight: "bold",
+    color: "#fbc02d",
+    fontBorder: "30px",
+  },
+  websiteName1: {
+    fontSize: "30px",
+    fontWeight: "bold",
+    color: "#fbc02d",
+    fontBorder: "30px",
+
   },
   searchBar: {
     flex: 1, // Take up remaining space
@@ -173,6 +175,7 @@ const styles = {
   cartIcon: {
     fontSize: "35px",
     marginLeft: "10px", // Adjusting margin for the cart icon
+    color: "#fbc02d"
   },
 };
 

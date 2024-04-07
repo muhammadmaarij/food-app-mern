@@ -19,10 +19,15 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    pcategory: {
+        type: String,
+        required: true
+    },
     pimage: {
         type: String,
         required: true
-    }
+    },
+   
 });
 
 
