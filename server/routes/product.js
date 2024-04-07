@@ -39,7 +39,7 @@ router.post('/postProduct', upload.single('pimage'), async (req, res) => {
     if (!req.file) {
         return res.status(400).json({ message: "No image file provided" });
     }
-    const { pname, ptitle, pdescription, pprice } = req.body;
+    const { pname, ptitle, pdescription, pprice, pcategory } = req.body;
     const pimage = req.file.filename;
 
     try {
@@ -58,9 +58,6 @@ router.post('/postProduct', upload.single('pimage'), async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 });
-
-
-
 
 
 router.get('/fetchProduct/:productId', async (req, res) => {
