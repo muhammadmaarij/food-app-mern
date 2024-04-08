@@ -13,6 +13,7 @@ import bread from "../bread.png";
 function LandingPage({ setCartItems }) {
   const [hoveredProductIndex, setHoveredProductIndex] = useState(null);
   const [products, setProducts] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
   // const [cartItems, setCartItems] = useState([]);
 
   const categories = [
@@ -25,6 +26,14 @@ function LandingPage({ setCartItems }) {
 
     // Add more categories as needed
   ];
+
+  const handleCategorySelection = (category) => {
+    setSelectedCategory(category);
+  };
+
+  const filteredProducts = selectedCategory
+    ? products.filter((product) => product.pcategory === selectedCategory)
+    : products;
 
   const callProducts = async () => {
     try {
@@ -78,9 +87,25 @@ function LandingPage({ setCartItems }) {
     <div style={pageContainerStyle}>
       <div style={contentWrapStyle}>
         <Header />
-        <div style={categoriesContainerStyle}>
+        {/* <div style={categoriesContainerStyle}>
           {categories.map((category, index) => (
             <div key={index} style={categoryStyle}>
+              <img
+                src={category.image}
+                alt={category.name}
+                style={categoryImageStyle}
+              />
+              <p style={categoryNameStyle}>{category.name}</p>
+            </div>
+          ))}
+        </div> */}
+        <div style={categoriesContainerStyle}>
+          {categories.map((category, index) => (
+            <div
+              key={index}
+              style={categoryStyle}
+              onClick={() => handleCategorySelection(category.name)}
+            >
               <img
                 src={category.image}
                 alt={category.name}
@@ -93,40 +118,77 @@ function LandingPage({ setCartItems }) {
         <h2 style={exploreText}>Explore Trending Products</h2>
         <div style={containerStyle}>
           <div style={cardContainerStyle}>
-            <div style={cardWrapperStyle}>
-              {products.map((product, index) => (
-                <Link
-                  to={{
-                    pathname: `/cardScreen/${product._id}`,
-                    state: { setCartItems },
-                  }}
-                  key={index}
-                  style={{ textDecoration: "none" }}
-                >
-                  <div
-                    style={{
-                      ...cardStyle,
-                      ...(index === hoveredProductIndex ? hoverEffect : {}),
+            {selectedCategory ? (
+              <div style={cardWrapperStyle}>
+                {filteredProducts.map((product, index) => (
+                  <Link
+                    to={{
+                      pathname: `/cardScreen/${product._id}`,
+                      state: { setCartItems },
                     }}
-                    onMouseEnter={() => setHoveredProductIndex(index)}
-                    onMouseLeave={() => setHoveredProductIndex(null)}
+                    key={index}
+                    style={{ textDecoration: "none" }}
                   >
-                    <img
-                      src={`http://localhost:5000/uploads/${encodeURIComponent(
-                        product.pimage
-                      )}`}
-                      alt={product.pname}
-                      style={cardImageStyle}
-                    />
-                    <div style={cardContentStyle}>
-                      <h3>{product.pname}</h3>
-                      <p>${product.pprice}</p>
-                      <button style={btn}>Add to Cart</button>
+                    <div
+                      style={{
+                        ...cardStyle,
+                        ...(index === hoveredProductIndex ? hoverEffect : {}),
+                      }}
+                      onMouseEnter={() => setHoveredProductIndex(index)}
+                      onMouseLeave={() => setHoveredProductIndex(null)}
+                    >
+                      <img
+                        src={`http://localhost:5000/uploads/${encodeURIComponent(
+                          product.pimage
+                        )}`}
+                        alt={product.pname}
+                        style={cardImageStyle}
+                      />
+                      <div style={cardContentStyle}>
+                        <h3>{product.pname}</h3>
+                        <p>${product.pprice}</p>
+                        <button style={btn}>Add to Cart</button>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <div style={cardWrapperStyle}>
+                {products.map((product, index) => (
+                  <Link
+                    to={{
+                      pathname: `/cardScreen/${product._id}`,
+                      state: { setCartItems },
+                    }}
+                    key={index}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <div
+                      style={{
+                        ...cardStyle,
+                        ...(index === hoveredProductIndex ? hoverEffect : {}),
+                      }}
+                      onMouseEnter={() => setHoveredProductIndex(index)}
+                      onMouseLeave={() => setHoveredProductIndex(null)}
+                    >
+                      <img
+                        src={`http://localhost:5000/uploads/${encodeURIComponent(
+                          product.pimage
+                        )}`}
+                        alt={product.pname}
+                        style={cardImageStyle}
+                      />
+                      <div style={cardContentStyle}>
+                        <h3>{product.pname}</h3>
+                        <p>${product.pprice}</p>
+                        <button style={btn}>Add to Cart</button>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
