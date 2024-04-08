@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import CustomButton from "../components/CustomButton";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const CartPage = () => {
   const [customerInfo, setCustomerInfo] = useState({
@@ -21,6 +22,8 @@ const CartPage = () => {
     address: "",
     contact: "",
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,42 +55,79 @@ const CartPage = () => {
 
   const checkoutHandler = async (e, amount) => {
     e.preventDefault();
-    const {
-      data: { key },
-    } = await axios.get("http://www.localhost:5000/api/getkey");
 
-    console.log(key);
+    try {
+      const {
+        data: { key },
+      } = await axios.get("/api/getkey");
+      const {
+        data: { order },
+      } = await axios.post("/api/checkout", { amount });
 
-    const {
-      data: { order },
-    } = await axios.post("http://localhost:5000/api/checkout", {
-      amount,
-    });
+      const options = {
+        key: key,
+        amount: order.amount,
+        currency: "INR",
+        name: "Sunrise Mart",
+        description: "Order summary",
+        image:
+          "https://github.com/muhammadmaarij/food-app-mern/blob/main/frontend/src/store_logo.png",
+        order_id: order.id,
+        prefill: {
+          name: customerInfo.name,
+          email: "gaurav.kumar@example.com",
+          contact: customerInfo.contact,
+        },
+        notes: {
+          address: customerInfo.address,
+        },
+        theme: {
+          color: "#007f73",
+        },
+        handler: async function (response) {
+          // Send verification post request to server with additional data
+          const verificationResponse = await axios.post(
+            "/api/paymentverification",
+            {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              customerInfo: {
+                name: customerInfo.name,
+                contact: customerInfo.contact,
+                address: customerInfo.address,
+              },
+              orderDetails: cartItems.map((item) => ({
+                itemName: item.pname,
+                price: item.pprice,
+                quantity: item.quantity,
+              })),
+            }
+          );
 
-    const options = {
-      key,
-      amount: order.amount,
-      currency: "INR",
-      name: "Sunrise Mart",
-      description: "Order summary",
-      image:
-        "https://github.com/muhammadmaarij/food-app-mern/blob/main/frontend/src/store_logo.png",
-      order_id: order.id,
-      callback_url: "http://localhost:5000/api/paymentverification",
-      prefill: {
-        name: customerInfo.name,
-        email: "gaurav.kumar@example.com",
-        contact: customerInfo.contact,
-      },
-      notes: {
-        address: customerInfo.address,
-      },
-      theme: {
-        color: "#007f73",
-      },
-    };
-    const razor = new window.Razorpay(options);
-    razor.open();
+          // Check the server response and navigate accordingly
+          if (verificationResponse.data.success) {
+            setCartItems([]);
+            localStorage.removeItem("cartItems");
+            navigate(
+              `/paymentsuccess?reference=${verificationResponse.data.paymentId}`
+            );
+          } else {
+            console.error(
+              "Payment verification failed",
+              verificationResponse.data.message
+            );
+            // Optionally, you could navigate to an error page or display an error message
+          }
+        },
+      };
+
+      const rzp1 = new window.Razorpay(options);
+      rzp1.open();
+    } catch (error) {
+      console.error("Error during checkout", error);
+      // Handle errors, such as displaying a message to the user
+    }
   };
 
   return (

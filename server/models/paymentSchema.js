@@ -13,8 +13,20 @@ const paymentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  customerDetails: {
+    name: String,
+    // email: String,
+    address: String,
+    contactNumber: String,
+  },
+  orderDetails: [
+    {
+      itemName: String,
+      price: Number,
+      quantity: Number,
+    },
+  ],
+  // Add other fields as necessary
 });
 
-const Payment = mongoose.model("Payment", paymentSchema);
-
-module.exports = Payment; // Export the Payment model
+module.exports = mongoose.model("Payment", paymentSchema);

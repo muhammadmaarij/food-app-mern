@@ -85,9 +85,15 @@ router.post("/checkout", async (req, res) => {
 });
 
 router.post("/paymentverification", async (req, res) => {
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
-    req.body;
+  const {
+    razorpay_order_id,
+    razorpay_payment_id,
+    razorpay_signature,
+    customerInfo,
+    orderDetails,
+  } = req.body;
 
+  console.log(req.body);
   const body = razorpay_order_id + "|" + razorpay_payment_id;
 
   const expectedSignature = crypto
@@ -98,25 +104,34 @@ router.post("/paymentverification", async (req, res) => {
   const isAuthentic = expectedSignature === razorpay_signature;
 
   if (isAuthentic) {
-    // Database comes here
+    try {
+      // Store the payment and customer details in the database
+      const savedPayment = await Payment.create({
+        razorpay_order_id,
+        razorpay_payment_id,
+        razorpay_signature,
+        customerDetails: customerInfo, // Save additional customer details
+        orderDetails, // Save order items details
+      });
 
-    await Payment.create({
-      razorpay_order_id,
-      razorpay_payment_id,
-      razorpay_signature,
-    });
-
-    res.redirect(
-      `http://localhost:3000/paymentsuccess?reference=${razorpay_payment_id}`
-    );
+      // Respond with success and the payment ID
+      res.json({
+        success: true,
+        message: "Payment verified successfully",
+        paymentId: savedPayment.razorpay_payment_id,
+      });
+    } catch (error) {
+      console.error("Error saving payment:", error);
+      res.status(500).json({
+        success: false,
+        message: "Error saving payment details",
+      });
+    }
   } else {
-    console.log("Order ID: ", razorpay_order_id);
-    console.log("Payment ID: ", razorpay_payment_id);
-    console.log("Signature: ", razorpay_signature);
-    console.log("Expected Signature: ", expectedSignature);
-
+    console.log("Invalid signature. Payment verification failed.");
     res.status(400).json({
       success: false,
+      message: "Invalid signature sent!",
     });
   }
 });
