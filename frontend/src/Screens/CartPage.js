@@ -13,6 +13,7 @@ import {
   Paper,
 } from "@mui/material";
 import CustomButton from "../components/CustomButton";
+import axios from "axios";
 
 const CartPage = () => {
   const [customerInfo, setCustomerInfo] = useState({
@@ -48,6 +49,46 @@ const CartPage = () => {
     (total, item) => total + item.pprice * item.quantity,
     0
   );
+
+  const checkoutHandler = async (e, amount) => {
+    e.preventDefault();
+    const {
+      data: { key },
+    } = await axios.get("http://www.localhost:5000/api/getkey");
+
+    console.log(key);
+
+    const {
+      data: { order },
+    } = await axios.post("http://localhost:5000/api/checkout", {
+      amount,
+    });
+
+    const options = {
+      key,
+      amount: order.amount,
+      currency: "INR",
+      name: "Sunrise Mart",
+      description: "Order summary",
+      image:
+        "https://github.com/muhammadmaarij/food-app-mern/blob/main/frontend/src/store_logo.png",
+      order_id: order.id,
+      callback_url: "http://localhost:5000/api/paymentverification",
+      prefill: {
+        name: customerInfo.name,
+        email: "gaurav.kumar@example.com",
+        contact: customerInfo.contact,
+      },
+      notes: {
+        address: customerInfo.address,
+      },
+      theme: {
+        color: "#007f73",
+      },
+    };
+    const razor = new window.Razorpay(options);
+    razor.open();
+  };
 
   return (
     <Container maxWidth="lg" sx={{ my: 4 }}>
@@ -114,7 +155,10 @@ const CartPage = () => {
                 margin="normal"
                 variant="outlined"
               />
-              <CustomButton text="Checkout" onClick={() => {}} />
+              <CustomButton
+                text="Checkout"
+                onClick={(e) => checkoutHandler(e, totalPrice)}
+              />
             </Box>
           </Paper>
         </Grid>
