@@ -15,6 +15,7 @@ import {
 import CustomButton from "../components/CustomButton";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Avatar, ListItemAvatar } from "@mui/material";
 
 const CartPage = () => {
   const [customerInfo, setCustomerInfo] = useState({
@@ -117,8 +118,15 @@ const CartPage = () => {
               "Payment verification failed",
               verificationResponse.data.message
             );
+            navigate(`/landingPage`);
             // Optionally, you could navigate to an error page or display an error message
           }
+        },
+        modal: {
+          ondismiss: function () {
+            // Navigate to the home page when the modal is dismissed
+            navigate("/landingPage");
+          },
         },
       };
 
@@ -148,6 +156,16 @@ const CartPage = () => {
                       </Button>
                     }
                   >
+                    <ListItemAvatar>
+                      <Avatar
+                        alt={item.pname}
+                        src={`http://localhost:5000/uploads/${encodeURIComponent(
+                          item.pimage
+                        )}`} // Use the image URL from your product data
+                        variant="square"
+                        sx={{ width: 56, height: 56, marginRight: 5 }} // Adjust the size as needed
+                      />
+                    </ListItemAvatar>
                     <ListItemText
                       primary={item.pname}
                       secondary={`Price: $${item.pprice} | Quantity: ${item.quantity}`}

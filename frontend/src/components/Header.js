@@ -32,7 +32,10 @@ const Header = ({ cartItems }) => {
 
   return (
     <div style={styles.header}>
-      <div style={styles.categoryContainer} onClick={() => navigate("/landingPage")}>
+      <div
+        style={styles.categoryContainer}
+        onClick={() => navigate("/landingPage")}
+      >
         <img src={logo} alt="logo" style={styles.categoryImage} />
       </div>
       <div style={styles.websiteName}>SunRise &nbsp; </div>
@@ -49,20 +52,6 @@ const Header = ({ cartItems }) => {
         </div>
       </div>
       <div style={styles.userActions}>
-        <button
-          style={styles.button}
-          onClick={() => navigate("/signin")}
-          className="sign-in"
-        >
-          Sign In
-        </button>
-        <button
-          style={styles.button}
-          onClick={() => navigate("/signup")}
-          className="sign-up"
-        >
-          Sign Up
-        </button>
         <button style={styles.button} onClick={logout} className="sign-up">
           Log Out
         </button>
@@ -132,7 +121,6 @@ const styles = {
     fontWeight: "bold",
     color: "#fbc02d",
     fontBorder: "30px",
-
   },
   searchBar: {
     flex: 1, // Take up remaining space
@@ -175,7 +163,7 @@ const styles = {
   cartIcon: {
     fontSize: "35px",
     marginLeft: "10px", // Adjusting margin for the cart icon
-    color: "#fbc02d"
+    color: "#fbc02d",
   },
 };
 

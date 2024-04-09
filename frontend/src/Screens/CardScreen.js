@@ -4,6 +4,8 @@ import Footer from "../components/Footer";
 import { Link, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import CustomButton from "../components/CustomButton";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const styles = {
   container: {
@@ -120,6 +122,21 @@ function CardScreen() {
     }
 
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    console.log("first", cartItems);
+    toast.success("Product Added Successfully", {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      style: { marginTop: "100px" },
+    });
+    // setTimeout(() => {
+    //   navigate("/landingPage");
+    // }, 1000);
   };
 
   if (!product) {
@@ -129,6 +146,7 @@ function CardScreen() {
   return (
     <div style={styles.container}>
       <Header />
+      <ToastContainer position="top-center" autoClose={5000} />
       <div style={styles.card}>
         <div style={styles.imageContainer}>
           <img
@@ -143,7 +161,9 @@ function CardScreen() {
           <h2 style={styles.productName}>{product.pname}</h2>
           <p style={styles.price}>Price: ${product.pprice}</p>
           <p style={styles.description}>Description: {product.pdescription}</p>
-          <p style={styles.description}>Product Category: {product.pcategory}</p>
+          <p style={styles.description}>
+            Product Category: {product.pcategory}
+          </p>
           <CustomButton text="Add to Cart" onClick={addToCart} />
         </div>
       </div>

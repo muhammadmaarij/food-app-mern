@@ -13,8 +13,6 @@ import HomeScreen from "./components/HomeScreen";
 import LandingPage from "./Screens/LandingPage";
 import CardScreen from "./Screens/CardScreen";
 import CartPage from "./Screens/CartPage";
-import SuccessPage from "./Screens/SuccessPage";
-import CheckoutPage from "./Screens/CheckoutPage";
 import PaymentSuccess from "./Screens/PaymentSuccess";
 
 function App() {
@@ -40,8 +38,6 @@ function App() {
             element={<LandingPage setCartItems={setCartItems} />}
           />
           <Route path="/cart" element={<CartPage />} />
-          <Route path="/success" element={<SuccessPage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/paymentsuccess" element={<PaymentSuccess />} />
           {/* <Route path="/product-management" element={<ProductManagement />} />
           <Route path="/homescreen" element={<HomeScreen />} />
