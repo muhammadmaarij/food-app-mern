@@ -108,18 +108,7 @@ function LandingPage({ setCartItems }) {
             />
           </div>
         </div>
-        {/* <div style={categoriesContainerStyle}>
-          {categories.map((category, index) => (
-            <div key={index} style={categoryStyle}>
-              <img
-                src={category.image}
-                alt={category.name}
-                style={categoryImageStyle}
-              />
-              <p style={categoryNameStyle}>{category.name}</p>
-            </div>
-          ))}
-        </div> */}
+
         <div style={categoriesContainerStyle}>
           {categories.map((category, index) => (
             <div
@@ -137,81 +126,6 @@ function LandingPage({ setCartItems }) {
           ))}
         </div>
         <h2 style={exploreText}>Explore Trending Products</h2>
-        {/* <div style={containerStyle}>
-          <div style={cardContainerStyle}>
-            {selectedCategory ? (
-              <div style={cardWrapperStyle}>
-                {filteredProducts.map((product, index) => (
-                  <Link
-                    to={{
-                      pathname: `/cardScreen/${product._id}`,
-                      state: { setCartItems },
-                    }}
-                    key={index}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <div
-                      style={{
-                        ...cardStyle,
-                        ...(index === hoveredProductIndex ? hoverEffect : {}),
-                      }}
-                      onMouseEnter={() => setHoveredProductIndex(index)}
-                      onMouseLeave={() => setHoveredProductIndex(null)}
-                    >
-                      <img
-                        src={`http://localhost:5000/uploads/${encodeURIComponent(
-                          product.pimage
-                        )}`}
-                        alt={product.pname}
-                        style={cardImageStyle}
-                      />
-                      <div style={cardContentStyle}>
-                        <h3>{product.pname}</h3>
-                        <p>${product.pprice}</p>
-                        <button style={btn}>Add to Cart</button>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            ) : (
-              <div style={cardWrapperStyle}>
-                {products.map((product, index) => (
-                  <Link
-                    to={{
-                      pathname: `/cardScreen/${product._id}`,
-                      state: { setCartItems },
-                    }}
-                    key={index}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <div
-                      style={{
-                        ...cardStyle,
-                        ...(index === hoveredProductIndex ? hoverEffect : {}),
-                      }}
-                      onMouseEnter={() => setHoveredProductIndex(index)}
-                      onMouseLeave={() => setHoveredProductIndex(null)}
-                    >
-                      <img
-                        src={`http://localhost:5000/uploads/${encodeURIComponent(
-                          product.pimage
-                        )}`}
-                        alt={product.pname}
-                        style={cardImageStyle}
-                      />
-                      <div style={cardContentStyle}>
-                        <h3>{product.pname}</h3>
-                        <p>${product.pprice}</p>
-                        <button style={btn}>Add to Cart</button>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-        </div> */}
         <div style={containerStyle}>
           <div style={cardContainerStyle}>
             <div style={cardWrapperStyle}>
