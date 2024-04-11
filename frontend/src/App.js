@@ -77,6 +77,7 @@ import AddProductPage from "./Screens/AddProductPage";
 import EditProductPage from "./Screens/EditProductPage";
 import ProductListPage from "./Screens/ProductListPage";
 import OrderSuccessPage from "./Screens/OrderSuccessPage";
+import AdminSignIn from "./components/AdminSignIn";
 
 function App() {
   const [userRole, setUserRole] = useState(null);
@@ -99,10 +100,16 @@ function App() {
         {/* Common routes */}
         <Route path="/" element={<SignIn />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/adminSignIn" element={<AdminSignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/paymentsuccess" element={<PaymentSuccess />} />
         <Route path="/orderSuccess" element={<OrderSuccessPage />} />
+        <Route
+          path="/landingPage"
+          element={<LandingPage setCartItems={setCartItems} />}
+        />
+        <Route path="/cardScreen/:productId" element={<CardScreen />} />
 
         {/* Conditional routes based on user role */}
         {userRole === "admin" ? (
@@ -115,19 +122,19 @@ function App() {
               element={<EditProductPage />}
             />
             {/* Redirect from root to admin product list */}
-            <Route
+            {/* <Route
               path="/"
               element={<Navigate replace to="/admin/product-list" />}
-            />
+            /> */}
           </>
         ) : (
           <>
             {/* Customer routes */}
-            <Route
+            {/* <Route
               path="/landingPage"
               element={<LandingPage setCartItems={setCartItems} />}
             />
-            <Route path="/cardScreen/:productId" element={<CardScreen />} />
+            <Route path="/cardScreen/:productId" element={<CardScreen />} /> */}
             {/* Redirect from admin routes to customer landing page */}
             <Route path="/admin/*" element={<Navigate replace to="/" />} />
           </>

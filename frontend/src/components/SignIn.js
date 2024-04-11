@@ -112,14 +112,14 @@ function SignIn() {
 
   const login = async (e) => {
     e.preventDefault();
-
-    // Here you can add hardcoded credentials for admin login
-    if (email === "admin@example.com" && password === "admin123") {
-      // Set user role to admin and navigate to the admin dashboard
-      localStorage.setItem("userInfo", JSON.stringify({ role: "admin" }));
-      navigate("/admin/product-list");
-      return;
-    }
+    console.log("ehehheh");
+    // // Here you can add hardcoded credentials for admin login
+    // if (email === "sunrise@gmail.com" && password === "sunrise@@123") {
+    //   // Set user role to admin and navigate to the admin dashboard
+    //   localStorage.setItem("userInfo", JSON.stringify({ role: "admin" }));
+    //   navigate("/admin/product-list");
+    //   return;
+    // }
 
     // Your existing login logic
     const res = await fetch("/signin", {
@@ -132,7 +132,7 @@ function SignIn() {
         password,
       }),
     });
-
+    console.log(res);
     const data = await res.json();
 
     if (res.status === 400 || !data) {
@@ -192,8 +192,17 @@ function SignIn() {
           <button type="submit" className="btn-primary">
             Sign In
           </button>
-          {/* Removed the link to sign-up page */}
+          <div style={{ textAlign: "center", marginTop: "10px" }}>
+            Don't have an account? <Link to="/signUp">Create Account</Link>
+          </div>
         </form>
+        <button
+          onClick={() => navigate("/adminSignIn")}
+          className="btn-primary"
+          style={{ width: "80%", marginTop: "10px", marginLeft: "10%" }}
+        >
+          Sign In Admin
+        </button>
       </div>
     </div>
   );

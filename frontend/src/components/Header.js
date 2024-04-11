@@ -16,9 +16,9 @@ const Header = ({ cartItems }) => {
       });
 
       if (res.status === 200) {
-        console.log("Logged out successfully");
         localStorage.removeItem("userInfo"); // Remove the admin information from local storage
         navigate("/signin"); // Navigate to the sign-in route after logging out
+        console.log("Logged out successfully");
       } else {
         throw new Error("Failed to log out");
       }
