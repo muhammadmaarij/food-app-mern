@@ -45,6 +45,7 @@ const ProductListPage = () => {
               <th>Title</th>
               <th>Description</th>
               <th>Price</th>
+              <th>Quantity</th>
               <th>Category</th>
               <th>Actions</th>
             </tr>
@@ -65,6 +66,7 @@ const ProductListPage = () => {
                 <td>{product.ptitle}</td>
                 <td>{product.pdescription}</td>
                 <td>{product.pprice}</td>
+                <td>{product.quantity}</td>
                 <td>{product.pcategory}</td>
                 <td className="action-buttons">
                   <Link

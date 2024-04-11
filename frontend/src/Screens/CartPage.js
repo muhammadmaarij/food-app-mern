@@ -194,7 +194,7 @@ const CartPage = () => {
                     </ListItemAvatar>
                     <ListItemText
                       primary={item.pname}
-                      secondary={`Price: $${item.pprice} | Quantity: ${item.quantity}`}
+                      secondary={`Price: ₹${item.pprice} | Quantity: ${item.quantity}`}
                     />
                   </ListItem>
                   <Divider />
@@ -202,7 +202,7 @@ const CartPage = () => {
               ))}
             </List>
             <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-              Total Price: ${totalPrice}
+              Total Price: ₹{totalPrice}
             </Typography>
           </Paper>
         </Grid>

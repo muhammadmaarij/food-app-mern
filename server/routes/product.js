@@ -34,7 +34,7 @@ router.post("/postProduct", upload.single("pimage"), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: "No image file provided" });
   }
-  const { pname, ptitle, pdescription, pprice, pcategory } = req.body;
+  const { pname, ptitle, pdescription, pprice, pcategory, quantity } = req.body;
   const pimage = req.file.filename;
 
   try {
@@ -43,6 +43,7 @@ router.post("/postProduct", upload.single("pimage"), async (req, res) => {
       ptitle,
       pdescription,
       pprice,
+      quantity,
       pimage,
       pcategory,
     });
@@ -76,12 +77,14 @@ router.put(
   "/updateProduct/:productId",
   upload.single("pimage"),
   async (req, res) => {
-    const { pname, ptitle, pdescription, pprice, pcategory } = req.body;
+    const { pname, ptitle, pdescription, pprice, pcategory, quantity } =
+      req.body;
     const updateData = {
       pname,
       ptitle,
       pdescription,
       pprice,
+      quantity,
       pcategory,
     };
 
@@ -138,10 +141,11 @@ router.post("/checkAvailability", async (req, res) => {
 
 router.post("/updateQuantities", async (req, res) => {
   try {
-    const items = req.body.items;
-
-    for (const item of items) {
+    const cartItems = req.body.items;
+    console.log("ddddd", cartItems);
+    for (const item of cartItems) {
       const product = await Product.findById(item._id);
+      console.log("pppp", product);
       if (product) {
         product.quantity -= item.quantity;
         await product.save();

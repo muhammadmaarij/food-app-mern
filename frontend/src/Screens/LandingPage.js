@@ -241,7 +241,7 @@ function LandingPage({ setCartItems }) {
                     />
                     <div style={cardContentStyle}>
                       <h3>{product.pname}</h3>
-                      <p>${product.pprice}</p>
+                      <p>₹{product.pprice}</p>
                       <button style={btn}>Add to Cart</button>
                     </div>
                   </div>

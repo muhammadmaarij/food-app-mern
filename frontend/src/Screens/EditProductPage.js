@@ -9,6 +9,7 @@ const EditProductPage = () => {
     ptitle: "",
     pdescription: "",
     pprice: "",
+    quantity: 0,
     pcategory: "",
     pimage: null,
   });
@@ -53,6 +54,7 @@ const EditProductPage = () => {
     formData.append("ptitle", product.ptitle);
     formData.append("pdescription", product.pdescription);
     formData.append("pprice", product.pprice);
+    formData.append("quantity", product.quantity);
     formData.append("pcategory", product.pcategory);
     if (product.pimage) {
       formData.append("pimage", product.pimage);
@@ -109,6 +111,16 @@ const EditProductPage = () => {
           id="pprice"
           name="pprice"
           value={product.pprice}
+          onChange={handleChange}
+          required
+        />
+
+        <label htmlFor="quantity">Quantity:</label>
+        <input
+          type="text"
+          id="quantity"
+          name="quantity"
+          value={product.quantity}
           onChange={handleChange}
           required
         />

@@ -59,7 +59,7 @@ const OrderSuccessPage = () => {
           {/* Payment Info */}
           <div className="payment-info">
             <div>Payment method</div>
-            <div>Cash on Delivery (COD) - {orderDetails.amount}</div>
+            <div>Cash on Delivery (COD) - ₹{orderDetails.amount}</div>
           </div>
 
           <div className="order-total">
