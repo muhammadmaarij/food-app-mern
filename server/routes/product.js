@@ -1,83 +1,119 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const jwt = require('jsonwebtoken');
-const authenticate = require("../middleware/authenticate")
-const multer = require('multer');
-const fs = require('fs');
-const path = require('path');
+const jwt = require("jsonwebtoken");
+const authenticate = require("../middleware/authenticate");
+const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
 
-const Product = require('../models/productsSchema');
+const Product = require("../models/productsSchema");
 
-const uploadsDir = path.join(__dirname, 'uploads');
+const uploadsDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir, { recursive: true });
+  fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
-
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const dest = path.join(__dirname, 'uploads'); // Use an absolute path
-        console.log('Destination Path:', dest); // Log the destination path
-        cb(null, dest);
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.originalname);
-    }
+  destination: function (req, file, cb) {
+    const dest = path.join(__dirname, "uploads"); // Use an absolute path
+    console.log("Destination Path:", dest); // Log the destination path
+    cb(null, dest);
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
 });
-
 
 const upload = multer({ storage: storage });
 
+router.get("/product", (req, res) => {
+  res.send("Hello World");
+});
 
+router.post("/postProduct", upload.single("pimage"), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "No image file provided" });
+  }
+  const { pname, ptitle, pdescription, pprice, pcategory } = req.body;
+  const pimage = req.file.filename;
 
-router.get('/product', (req, res) => {
-    res.send('Hello World');
-}
+  try {
+    const newProduct = new Product({
+      pname,
+      ptitle,
+      pdescription,
+      pprice,
+      pimage,
+      pcategory,
+    });
+    await newProduct.save();
+    console.log("New Product:", newProduct); // Log the product after it's been saved
+    res.status(201).json(newProduct);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+router.get("/fetchProduct/:productId", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.productId);
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(404).json({ message: "Product not found" });
+  }
+});
+
+router.get("/fetchProducts", authenticate, async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.put(
+  "/updateProduct/:productId",
+  upload.single("pimage"),
+  async (req, res) => {
+    const { pname, ptitle, pdescription, pprice, pcategory } = req.body;
+    const updateData = {
+      pname,
+      ptitle,
+      pdescription,
+      pprice,
+      pcategory,
+    };
+
+    if (req.file) {
+      updateData.pimage = req.file.filename;
+    }
+
+    try {
+      const updatedProduct = await Product.findByIdAndUpdate(
+        req.params.productId,
+        updateData,
+        { new: true }
+      );
+      res.status(200).json(updatedProduct);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
 );
 
-router.post('/postProduct', upload.single('pimage'), async (req, res) => {
-    if (!req.file) {
-        return res.status(400).json({ message: "No image file provided" });
+router.delete("/deleteProduct/:productId", async (req, res) => {
+  try {
+    const deletedProduct = await Product.findByIdAndDelete(
+      req.params.productId
+    );
+    if (!deletedProduct) {
+      return res.status(404).json({ message: "Product not found" });
     }
-    const { pname, ptitle, pdescription, pprice, pcategory } = req.body;
-    const pimage = req.file.filename;
-
-    try {
-        const newProduct = new Product({
-            pname,
-            ptitle,
-            pdescription,
-            pprice,
-            pimage,
-            pcategory
-        });
-        await newProduct.save();
-        console.log('New Product:', newProduct); // Log the product after it's been saved
-        res.status(201).json(newProduct);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
+    res.status(200).json({ message: "Product deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
-
-
-router.get('/fetchProduct/:productId', async (req, res) => {
-    try {
-      const product = await Product.findById(req.params.productId);
-      res.status(200).json(product);
-    } catch (error) {
-      res.status(404).json({ message: 'Product not found' });
-    }
-  });
-  
-
-router.get('/fetchProducts', authenticate, async (req, res) => {
-    try {
-        const products = await Product.find();
-        res.status(200).json(products);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-});
-
 
 module.exports = router;

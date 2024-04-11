@@ -42,14 +42,7 @@ const Header = ({ cartItems }) => {
       <div style={styles.websiteName1}>Mart</div>
 
       <div style={styles.searchBar}>
-        <div style={styles.searchContainer}>
-          <FaSearch style={styles.searchIcon} />
-          <input
-            type="text"
-            placeholder="Search Essentials, Groceries and More"
-            style={styles.searchInput}
-          />
-        </div>
+        <div style={styles.searchContainer}></div>
       </div>
       <div style={styles.userActions}>
         <button style={styles.button} onClick={logout} className="sign-up">

@@ -9,11 +9,14 @@ import gourment from "../gourment.png";
 import wheat from "../wheat.png";
 import health from "../health.png";
 import bread from "../bread.png";
+import { FaCartPlus, FaSearch } from "react-icons/fa";
 
 function LandingPage({ setCartItems }) {
   const [hoveredProductIndex, setHoveredProductIndex] = useState(null);
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+
   // const [cartItems, setCartItems] = useState([]);
 
   const categories = [
@@ -31,9 +34,15 @@ function LandingPage({ setCartItems }) {
     setSelectedCategory(category);
   };
 
-  const filteredProducts = selectedCategory
-    ? products.filter((product) => product.pcategory === selectedCategory)
-    : products;
+  // const filteredProducts = selectedCategory
+  //   ? products.filter((product) => product.pcategory === selectedCategory)
+  //   : products;
+
+  const filteredProducts = products.filter(
+    (product) =>
+      (selectedCategory == "" || product.pcategory === selectedCategory) &&
+      product.pname.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const callProducts = async () => {
     try {
@@ -87,6 +96,18 @@ function LandingPage({ setCartItems }) {
     <div style={pageContainerStyle}>
       <div style={contentWrapStyle}>
         <Header />
+        <div style={styles.searchBar}>
+          <div style={styles.searchContainer}>
+            <FaSearch style={styles.searchIcon} />
+            <input
+              type="text"
+              placeholder="Search Essentials, Groceries and More"
+              style={styles.searchInput}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
         {/* <div style={categoriesContainerStyle}>
           {categories.map((category, index) => (
             <div key={index} style={categoryStyle}>
@@ -116,7 +137,7 @@ function LandingPage({ setCartItems }) {
           ))}
         </div>
         <h2 style={exploreText}>Explore Trending Products</h2>
-        <div style={containerStyle}>
+        {/* <div style={containerStyle}>
           <div style={cardContainerStyle}>
             {selectedCategory ? (
               <div style={cardWrapperStyle}>
@@ -189,6 +210,44 @@ function LandingPage({ setCartItems }) {
                 ))}
               </div>
             )}
+          </div>
+        </div> */}
+        <div style={containerStyle}>
+          <div style={cardContainerStyle}>
+            <div style={cardWrapperStyle}>
+              {filteredProducts.map((product, index) => (
+                <Link
+                  to={{
+                    pathname: `/cardScreen/${product._id}`,
+                    state: { setCartItems },
+                  }}
+                  key={index}
+                  style={{ textDecoration: "none" }}
+                >
+                  <div
+                    style={{
+                      ...cardStyle,
+                      ...(index === hoveredProductIndex ? hoverEffect : {}),
+                    }}
+                    onMouseEnter={() => setHoveredProductIndex(index)}
+                    onMouseLeave={() => setHoveredProductIndex(null)}
+                  >
+                    <img
+                      src={`http://localhost:5000/uploads/${encodeURIComponent(
+                        product.pimage
+                      )}`}
+                      alt={product.pname}
+                      style={cardImageStyle}
+                    />
+                    <div style={cardContentStyle}>
+                      <h3>{product.pname}</h3>
+                      <p>${product.pprice}</p>
+                      <button style={btn}>Add to Cart</button>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -284,6 +343,35 @@ const cardContentStyle = {
 
 const hoverEffect = {
   transform: "scale(1.05)",
+};
+
+const styles = {
+  searchBar: {
+    flex: 1, // Take up remaining space
+    display: "flex",
+    justifyContent: "center", // Center the search bar horizontally
+    alignItems: "center",
+    width: "100%", // Adjust the width as needed
+    margin: 20,
+  },
+  searchContainer: {
+    position: "relative",
+    width: "30%", // Adjust the width as needed
+  },
+  searchIcon: {
+    position: "absolute",
+    left: "10px",
+    top: "50%",
+    transform: "translateY(-50%)",
+    color: "#888",
+  },
+  searchInput: {
+    width: "100%",
+    padding: "8px 30px", // Adjust padding to accommodate the icon
+    borderRadius: "5px",
+    border: "1px solid #ddd",
+    fontSize: "16px",
+  },
 };
 
 export default LandingPage;
