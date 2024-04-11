@@ -58,6 +58,18 @@ const CartPage = () => {
     e.preventDefault();
 
     try {
+      // Check item availability in the database
+      const availabilityResponse = await axios.post("/checkAvailability", {
+        items: cartItems,
+      });
+
+      if (!availabilityResponse.data.success) {
+        console.error("Some items are not available in the required quantity");
+        // Handle the case where items are not available
+        // e.g., display a message to the user or navigate to an error page
+        return;
+      }
+
       const {
         data: { key },
       } = await axios.get("/api/getkey");
@@ -108,11 +120,25 @@ const CartPage = () => {
 
           // Check the server response and navigate accordingly
           if (verificationResponse.data.success) {
+            await axios.post("/updateQuantities", {
+              items: cartItems,
+            });
+            const itemsForSuccessPage = cartItems;
             setCartItems([]);
             localStorage.removeItem("cartItems");
-            navigate(
-              `/paymentsuccess?reference=${verificationResponse.data.paymentId}`
-            );
+            // navigate(
+            //   `/paymentsuccess?reference=${verificationResponse.data.paymentId}`
+            // );
+            navigate("/orderSuccess", {
+              state: {
+                orderDetails: {
+                  orderId: order.id,
+                  amount: order.amount / 100,
+                  customerInfo: customerInfo,
+                  cartItems: itemsForSuccessPage, // pass the stored items instead
+                },
+              },
+            });
           } else {
             console.error(
               "Payment verification failed",

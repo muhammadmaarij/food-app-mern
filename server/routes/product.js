@@ -63,7 +63,7 @@ router.get("/fetchProduct/:productId", async (req, res) => {
   }
 });
 
-router.get("/fetchProducts", authenticate, async (req, res) => {
+router.get("/fetchProducts", async (req, res) => {
   try {
     const products = await Product.find();
     res.status(200).json(products);
@@ -111,6 +111,44 @@ router.delete("/deleteProduct/:productId", async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
     res.status(200).json({ message: "Product deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.post("/checkAvailability", async (req, res) => {
+  try {
+    const items = req.body.items;
+
+    for (const item of items) {
+      const product = await Product.findById(item._id);
+      if (!product || product.quantity < item.quantity) {
+        return res.status(200).json({
+          success: false,
+          message: `Item ${item.pname} is not available in the required quantity.`,
+        });
+      }
+    }
+
+    res.status(200).json({ success: true });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.post("/updateQuantities", async (req, res) => {
+  try {
+    const items = req.body.items;
+
+    for (const item of items) {
+      const product = await Product.findById(item._id);
+      if (product) {
+        product.quantity -= item.quantity;
+        await product.save();
+      }
+    }
+
+    res.status(200).json({ success: true });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
